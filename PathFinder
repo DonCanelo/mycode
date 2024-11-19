@@ -1,0 +1,42 @@
+import os
+import platform
+import openpyxl
+
+def search_desktop_filenames(keyword):
+    """Searches the user's desktop for files with the specified keyword in their names and writes them to an Excel file.
+
+    Args:
+        keyword: The keyword to search for.
+    """
+
+    # Determine the desktop path based on the operating system
+    if platform.system() == 'Windows':
+        desktop_path = os.path.join(os.environ['USERPROFILE'], 'Desktop')
+    elif platform.system() == 'Darwin':  # macOS
+        desktop_path = os.path.expanduser("~/Desktop")
+    elif platform.system() == 'Linux':
+        desktop_path = os.path.join(os.environ['HOME'], 'Desktop')
+    else:
+        print("Unsupported operating system.")
+        return
+
+    # Create a new Excel workbook and worksheet
+    workbook = openpyxl.Workbook()
+    sheet = workbook.active
+    sheet.title = "Found Files"
+
+    # Write the header row
+    sheet.append(["File Path"])
+
+    # Search for files and write them to the sheet
+    for root, dirs, files in os.walk(desktop_path):
+        for file in files:
+            if keyword in file:
+                sheet.append([os.path.join(root, file)])
+
+    # Save the Excel file
+    workbook.save("found_files.xlsx")
+
+# Example usage:
+keyword = input("Enter the keyword to search for in filenames: ")
+search_desktop_filenames(keyword)
