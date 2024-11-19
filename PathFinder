@@ -1,6 +1,5 @@
 import os
 import platform
-import openpyxl
 
 def search_desktop_filenames(keyword):
     """Searches the user's desktop for files with the specified keyword in their names and writes them to an Excel file.
@@ -34,8 +33,7 @@ def search_desktop_filenames(keyword):
             if keyword in file:
                 sheet.append([os.path.join(root, file)])
 
-    # Save the Excel file
-    workbook.save("found_files.xlsx")
+    
 
 # Example usage:
 keyword = input("Enter the keyword to search for in filenames: ")
